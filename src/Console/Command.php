@@ -171,7 +171,10 @@ class Command extends ConsoleCommand
     protected function getResult()
     {
         $result = new TestResult($this->eventEmitter);
-        $this->getLoader()->load($this->configuration->getPath());
+        $loader = $this->getLoader();
+        foreach ($this->configuration->getPaths() as $path) {
+            $loader->load($path);
+        }
         $this->factory->create($this->configuration->getReporter());
         $this->runner->run($result);
 

@@ -35,6 +35,11 @@ class Configuration
     protected $path;
 
     /**
+     * @var array
+     */
+    protected $paths;
+
+    /**
      * @var string
      */
     protected $configurationFile;
@@ -52,6 +57,7 @@ class Configuration
     public function __construct()
     {
         $this->path = getcwd();
+        $this->paths = [$this->path];
         $this->configurationFile = getcwd() . DIRECTORY_SEPARATOR . 'peridot.php';
         $this->dsl = __DIR__ . DIRECTORY_SEPARATOR . 'Dsl.php';
     }
@@ -106,7 +112,7 @@ class Configuration
      */
     public function setPath($path)
     {
-        return $this->write('path', $path);
+        return $this->writePaths([$path]);
     }
 
     /**
@@ -116,7 +122,32 @@ class Configuration
      */
     public function getPath()
     {
-        return $this->path;
+        return $this->paths[0];
+    }
+
+    /**
+     * Set the paths to load tests from
+     *
+     * @param array $paths
+     * @return $this
+     */
+    public function setPaths(array $paths)
+    {
+        if (empty($paths)) {
+            throw new \InvalidArgumentException('Paths cannot be empty.');
+        }
+
+        return $this->writePaths($paths);
+    }
+
+    /**
+     * Return the paths being searched for tests
+     *
+     * @return array
+     */
+    public function getPaths()
+    {
+        return $this->paths;
     }
 
     /**
@@ -243,8 +274,8 @@ class Configuration
      * Write a configuration value and persist it to the current
      * environment.
      *
-     * @param $varName
-     * @param $value
+     * @param string $varName
+     * @param string $value
      * @return $this
      */
     protected function write($varName, $value)
@@ -253,6 +284,20 @@ class Configuration
         $parts = preg_split('/(?=[A-Z])/', $varName);
         $env = 'PERIDOT_' . strtoupper(join('_', $parts));
         putenv($env . '=' . $value);
+        return $this;
+    }
+
+    /**
+     * Write the paths and persist them to the current environment.
+     *
+     * @param array $paths
+     * @return $this
+     */
+    protected function writePaths(array $paths)
+    {
+        $this->paths = $paths;
+        putenv('PERIDOT_PATH=' . $paths[0]);
+        putenv('PERIDOT_PATHS=' . implode(PATH_SEPARATOR, $paths));
         return $this;
     }
 }

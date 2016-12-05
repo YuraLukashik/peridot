@@ -8,7 +8,7 @@ describe('ConfigurationReader', function() {
 
     beforeEach(function() {
         $this->definition = array(
-            'path' => 'mypath',
+            'path' => ['mypath-a', 'mypath-b'],
             '--grep' => 'mygrep',
             '--no-colors' => true,
             '--bail' => true,
@@ -16,7 +16,8 @@ describe('ConfigurationReader', function() {
         );
         $this->input = new ArrayInput($this->definition, new InputDefinition());
         $this->assert = function($config) {
-            assert($config->getPath() == "mypath", "path should be mypath");
+            assert($config->getPath() == "mypath-a", "path should be mypath-a");
+            assert($config->getPaths() == ['mypath-a', 'mypath-b'], "paths should be mypath-a:mypath-b");
             assert($config->getGrep() == "mygrep", "grep should be mygrep");
             assert(!$config->areColorsEnabled(), "colors should be disabled");
             assert($config->shouldStopOnFailure(), "should stop on failure");

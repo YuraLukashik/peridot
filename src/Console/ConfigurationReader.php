@@ -42,8 +42,9 @@ class ConfigurationReader
             'configuration' => [$configuration, 'setConfigurationFile']
         ];
 
-        if ($path = $this->input->getArgument('path')) {
-            $configuration->setPath($path);
+        $paths = $this->input->getArgument('path');
+        if (!empty($paths)) {
+            $configuration->setPaths($paths);
         }
 
         foreach ($options as $option => $callable) {

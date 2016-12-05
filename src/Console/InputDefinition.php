@@ -19,7 +19,7 @@ class InputDefinition extends Definition
     public function __construct()
     {
         parent::__construct([]);
-        $this->addArgument(new InputArgument('path', InputArgument::OPTIONAL, 'The path to a directory or file containing specs'));
+        $this->addArgument(new InputArgument('path', InputArgument::OPTIONAL | InputArgument::IS_ARRAY, 'The path to a directory or file containing specs', ['specs', 'test']));
 
         $this->addOption(new InputOption('grep', 'g', InputOption::VALUE_REQUIRED, 'Run tests matching <pattern> <comment>(default: *.spec.php)</comment>'));
         $this->addOption(new InputOption('no-colors', 'C', InputOption::VALUE_NONE, 'Disable output colors'));
@@ -30,23 +30,6 @@ class InputDefinition extends Definition
         $this->addOption(new InputOption('reporters', null, InputOption::VALUE_NONE, 'List all available reporters'));
         $this->addOption(new InputOption('--version', '-V', InputOption::VALUE_NONE, 'Display the Peridot version number'));
         $this->addOption(new InputOption('--help', '-h', InputOption::VALUE_NONE, 'Display this help message.'));
-    }
-
-    /**
-     * Add an argument
-     *
-     * @param  string $name
-     * @param  null          $mode
-     * @param  string        $description
-     * @param  null          $default
-     * @return InputDefinition
-     */
-    public function argument($name, $mode = null, $description = '', $default = null)
-    {
-        $argument = new InputArgument($name, $mode, $description, $default);
-        $this->addArgument($argument);
-
-        return $this;
     }
 
     /**

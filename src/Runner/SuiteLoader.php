@@ -54,8 +54,8 @@ class SuiteLoader implements SuiteLoaderInterface
         if (is_file($path)) {
             return [$path];
         }
-        if (! file_exists($path)) {
-            throw new \RuntimeException("Cannot load path $path");
+        if (!file_exists($path)) {
+            return [];
         }
         $pattern = realpath($path) . '/' . $this->pattern;
 

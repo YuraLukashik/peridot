@@ -26,14 +26,9 @@ describe("SuiteLoader", function() {
             assert(count($test) == 1, "suite loader should load 1 spec");
         });
 
-        it("should throw exception if path not found", function() {
-            $exception = null;
-            try {
-                $this->loader->getTests('nope');
-            } catch (Exception $e) {
-                $exception = $e;
-            }
-            assert(!is_null($exception), "loader should have thrown exception");
+        it("should return an empty array if path not found", function() {
+            $tests = $this->loader->getTests('nope');
+            assert(count($tests) == 0, "suite loader should have loaded 0 specs");
         });
 
         context('when search path contains a trailing slash', function () {
